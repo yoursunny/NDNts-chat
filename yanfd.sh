@@ -12,6 +12,7 @@ if ! [[ -f runtime/yanfd.toml.sample ]]; then
 fi
 
 cp runtime/yanfd.toml.sample runtime/yanfd.toml
+dasel put bool -f runtime/yanfd.toml '.faces.tcp.enabled' true
 dasel put bool -f runtime/yanfd.toml '.faces.websocket.enabled' true
 dasel put string -f runtime/yanfd.toml '.faces.websocket.bind' '127.0.0.1'
 dasel put bool -f runtime/yanfd.toml '.mgmt.allow_localhop' true

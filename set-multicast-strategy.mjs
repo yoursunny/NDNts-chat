@@ -1,13 +1,12 @@
 import { ControlCommand } from "@ndn/nfdmgmt";
-import { UdpTransport } from "@ndn/node-transport";
+import { TcpTransport } from "@ndn/node-transport";
 import { Name } from "@ndn/packet";
 import dotenv from "dotenv-defaults";
 
 dotenv.config({ defaults: "sample.env" });
 
 async function main() {
-  const uplink = await UdpTransport.createFace({ l3: { local: true } }, "127.0.0.1", 6363);
-  uplink.addRoute(new Name());
+  const uplink = await TcpTransport.createFace({}, "127.0.0.1", 6363);
 
   /** @type {import("@ndn/nfdmgmt").ControlResponse} */
   let response;

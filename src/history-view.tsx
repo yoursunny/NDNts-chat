@@ -13,9 +13,7 @@ export class HistoryView extends Component<Props> {
   private readonly $dl = createRef<HTMLDListElement>();
 
   override componentDidUpdate() {
-    if (this.$dl.current) {
-      this.$dl.current.scrollTop = this.$dl.current.scrollHeight;
-    }
+    this.$dl.current!.scrollTop = this.$dl.current!.scrollHeight;
   }
 
   override render() {
@@ -23,9 +21,9 @@ export class HistoryView extends Component<Props> {
     return (
       <dl ref={this.$dl} class="history-view">
         {messages.map((m, i) => [
-          i === 0 || m.sender !== messages[i - 1].sender ?
-            <SenderView key={`a_${m.sender}_${m.seqNum}`} sender={m.sender} isMe={m.sender === myID}/> :
-            undefined,
+          m.sender === messages[i - 1]?.sender ? undefined : (
+            <SenderView key={`a_${m.sender}_${m.seqNum}`} sender={m.sender} isMe={m.sender === myID}/>
+          ),
           <MessageView key={`t_${m.sender}_${m.seqNum}`} message={m}/>,
         ])}
       </dl>
