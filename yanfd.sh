@@ -22,6 +22,6 @@ YANFD_PID=$!
 trap "kill -s SIGINT $YANFD_PID" EXIT
 
 sleep 2
-node set-multicast-strategy.mjs
+./set-multicast-strategy.ts
 echo 'YaNFD is ready, press ENTER to stop'
 read

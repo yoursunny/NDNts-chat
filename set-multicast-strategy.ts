@@ -1,4 +1,5 @@
-import { ControlCommand } from "@ndn/nfdmgmt";
+#!/usr/bin/env -S node --loader tsm
+import { ControlCommand, ControlResponse } from "@ndn/nfdmgmt";
 import { TcpTransport } from "@ndn/node-transport";
 import { Name } from "@ndn/packet";
 import dotenv from "dotenv-defaults";
@@ -8,8 +9,7 @@ dotenv.config({ defaults: "sample.env" });
 async function main() {
   const uplink = await TcpTransport.createFace({}, "127.0.0.1", 6363);
 
-  /** @type {import("@ndn/nfdmgmt").ControlResponse} */
-  let response;
+  let response: ControlResponse;
   try {
     response = await ControlCommand.call("strategy-choice/set", {
       name: new Name(process.env.SYNC_PREFIX),
@@ -27,4 +27,8 @@ async function main() {
   }
 }
 
-main();
+main()
+  .catch((err) => {
+    console.error(err);
+    process.exit(1);
+  });

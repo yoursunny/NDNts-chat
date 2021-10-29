@@ -9,6 +9,12 @@ module.exports = {
   overrides: [
     {
       files: [
+        "./*.ts",
+      ],
+      ...merge(js, ts),
+    },
+    {
+      files: [
         "./src/**/*.(ts|tsx)",
       ],
       ...merge(js, ts, preact),
