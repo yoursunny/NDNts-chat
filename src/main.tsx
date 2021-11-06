@@ -1,15 +1,11 @@
-import { enableNfdPrefixReg } from "@ndn/nfdmgmt";
-import { WsTransport } from "@ndn/ws-transport";
 import { h, render } from "preact";
 
 import { App } from "./app";
-import { env } from "./env";
+import { connect } from "./connect";
 
 async function main() {
-  const uplink = await WsTransport.createFace({}, env.ROUTER);
-  enableNfdPrefixReg(uplink);
-
-  render(<App/>, document.body);
+  const cr = await connect();
+  render(<App cr={cr}/>, document.body);
 }
 
 document.addEventListener("DOMContentLoaded", main);

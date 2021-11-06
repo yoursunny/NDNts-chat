@@ -1,11 +1,17 @@
 import { Endpoint, Producer } from "@ndn/endpoint";
 import { SequenceNum } from "@ndn/naming-convention2";
-import { Component, Data, Interest } from "@ndn/packet";
+import { Component, Data, Interest, Signer, Verifier } from "@ndn/packet";
 import { SvSync, SyncNode, SyncUpdate } from "@ndn/sync";
 import { fromUtf8, toUtf8 } from "@ndn/tlv";
 import mitt, { Emitter } from "mitt";
 
 import { env } from "./env";
+
+export interface Options {
+  myID: string;
+  signer: Signer;
+  verifier: Verifier;
+}
 
 export interface ChatMessage {
   sender: string;
@@ -19,19 +25,24 @@ type EventMap = {
 };
 
 export class ChatApp {
-  constructor() {
+  constructor({ myID, signer, verifier }: Options) {
     Object.assign(this, mitt());
 
-    this.myID = Math.trunc(Math.random() * 1e9).toString().padStart(8, "0");
+    this.myID = myID;
 
     this.sync = new SvSync({ syncPrefix: env.SYNC_PREFIX });
     this.sync.on("update", this.handleUpdate);
     this.myNode = this.sync.add(this.myID);
 
-    this.producer = new Endpoint().produce(env.USER_PREFIX.append(this.myID), this.handleInterest);
+    this.producer = new Endpoint().produce(
+      env.USER_PREFIX.append(this.myID),
+      this.handleInterest,
+      { dataSigner: signer },
+    );
     this.consumer = new Endpoint({
       retx: 2,
       signal: this.consumerAbort.signal,
+      verifier,
     });
   }
 

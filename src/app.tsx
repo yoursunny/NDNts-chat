@@ -1,27 +1,38 @@
+import { HierarchicalVerifier } from "@ndn/trust-schema";
 import { Component, Fragment, h } from "preact";
 
 import { ChatApp, ChatMessage } from "./chat";
 import { ComposeForm } from "./compose-form";
+import type { ConnectResult } from "./connect";
 import { env } from "./env";
 import { HistoryView } from "./history-view";
 
+interface Props {
+  cr: ConnectResult;
+}
+
 interface State {
-  myID: string;
   history: ChatMessage[];
 }
 
-export class App extends Component<{}, State> {
+export class App extends Component<Props, State> {
   state = {
-    myID: "",
     history: [],
   };
 
   private chat!: ChatApp;
 
   override componentDidMount() {
-    this.chat = new ChatApp();
+    const { cr } = this.props;
+    const verifier = new HierarchicalVerifier({
+      trustAnchors: [cr.caCert],
+    });
+    this.chat = new ChatApp({
+      myID: cr.myID,
+      signer: cr.signer,
+      verifier,
+    });
     this.chat.on("messages", this.appendHistory);
-    this.setState({ myID: this.chat.myID });
   }
 
   override componentWillUnmount() {
@@ -31,7 +42,7 @@ export class App extends Component<{}, State> {
   override render() {
     return (
       <>
-        <HistoryView messages={this.state.history} myID={this.state.myID}/>
+        <HistoryView messages={this.state.history} myID={this.props.cr.myID}/>
         <ComposeForm maxLength={2048} onSend={this.handleSend}/>
       </>
     );
