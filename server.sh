@@ -9,7 +9,7 @@ if ! command -v dasel >/dev/null; then
 fi
 if ! [[ -f runtime/yanfd.toml.sample ]]; then
   mkdir -p runtime
-  curl -sfLS -o runtime/yanfd.toml.sample https://raw.githubusercontent.com/named-data/YaNFD/master/yanfd.toml.sample
+  curl -fsLS -o runtime/yanfd.toml.sample https://raw.githubusercontent.com/named-data/YaNFD/master/yanfd.toml.sample
 fi
 
 YANFD_PID=
@@ -26,12 +26,14 @@ trap cleanup EXIT
 
 yanfd_start() {
   cp runtime/yanfd.toml.sample runtime/yanfd.toml
+  dasel put bool -f runtime/yanfd.toml '.faces.ethernet.enabled' false
+  dasel put bool -f runtime/yanfd.toml '.faces.unix.enabled' false
   dasel put bool -f runtime/yanfd.toml '.faces.tcp.enabled' true
   dasel put bool -f runtime/yanfd.toml '.faces.websocket.enabled' true
   dasel put string -f runtime/yanfd.toml '.faces.websocket.bind' '127.0.0.1'
   dasel put bool -f runtime/yanfd.toml '.mgmt.allow_localhop' true
 
-  yanfd -config runtime/yanfd.toml -disable-ethernet -disable-unix &
+  yanfd -config runtime/yanfd.toml &
   YANFD_PID=$!
 
   sleep 2
@@ -41,16 +43,16 @@ yanfd_start() {
 ca_start() {
   local KEYCHAIN_CLI=./node_modules/.bin/ndnts-keychain
   export NDNTS_KEYCHAIN=./runtime/keychain
-  if ! [[ -f public/profile.data ]]; then
+  if ! [[ -f ./runtime/profile.data ]]; then
     source sample.env
     [[ -f .env ]] && source .env
     rm -rf "${NDNTS_KEYCHAIN}"
     CACERT=$($KEYCHAIN_CLI gen-key "${CA_PREFIX}")
     echo $CACERT
     $KEYCHAIN_CLI ndncert03-make-profile --out ./runtime/profile.data --prefix "${CA_PREFIX}" --cert "$CACERT"
-    cp ./runtime/profile.data ./public/profile.data
   fi
 
+  cp ./runtime/profile.data ./public/profile.data
   $KEYCHAIN_CLI ndncert03-ca --profile ./runtime/profile.data --store ./runtime/repo \
     --challenge nop &
   CA_PID=$!

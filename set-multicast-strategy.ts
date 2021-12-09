@@ -6,29 +6,19 @@ import dotenv from "dotenv-defaults";
 
 dotenv.config({ defaults: "sample.env" });
 
-async function main() {
-  const uplink = await TcpTransport.createFace({}, "127.0.0.1", 6363);
+const uplink = await TcpTransport.createFace({}, "127.0.0.1", 6363);
 
-  let response: ControlResponse;
-  try {
-    response = await ControlCommand.call("strategy-choice/set", {
-      name: new Name(process.env.SYNC_PREFIX),
-      strategy: new Name("/localhost/nfd/strategy/multicast"),
-    });
-  } finally {
-    uplink.close();
-  }
-
-  process.stderr.write(`set multicast strategy: ${response.statusCode} ${response.statusText}\n`);
-  if (response.statusCode === 200) {
-    process.exitCode = 0;
-  } else {
-    process.exitCode = 1;
-  }
+let response: ControlResponse;
+try {
+  response = await ControlCommand.call("strategy-choice/set", {
+    name: new Name(process.env.SYNC_PREFIX),
+    strategy: new Name("/localhost/nfd/strategy/multicast"),
+  });
+} finally {
+  uplink.close();
 }
 
-main()
-  .catch((err) => {
-    console.error(err);
-    process.exit(1);
-  });
+process.stderr.write(`set multicast strategy: ${response.statusCode} ${response.statusText}\n`);
+if (response.statusCode !== 200) {
+  process.exit(1);
+}

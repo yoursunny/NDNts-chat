@@ -8,7 +8,7 @@ import { WsTransport } from "@ndn/ws-transport";
 
 import { env } from "./env";
 
-const keyChain = KeyChain.open("3ec5a464-ac23-488e-95d2-81b6798f3080");
+const keyChain = KeyChain.open("chat");
 
 export interface ConnectResult {
   myID: string;
