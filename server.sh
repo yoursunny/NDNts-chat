@@ -43,6 +43,7 @@ yanfd_start() {
 ca_start() {
   local KEYCHAIN_CLI=./node_modules/.bin/ndnts-keychain
   export NDNTS_KEYCHAIN=./runtime/keychain
+  export NDNTS_UPLINK=tcp://localhost:6363
   if ! [[ -f ./runtime/profile.data ]]; then
     source sample.env
     [[ -f .env ]] && source .env

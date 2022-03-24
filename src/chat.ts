@@ -1,8 +1,8 @@
 import { Endpoint, Producer } from "@ndn/endpoint";
 import { SequenceNum } from "@ndn/naming-convention2";
-import { Component, Data, Interest, Signer, Verifier } from "@ndn/packet";
+import { Data, Interest, Signer, Verifier } from "@ndn/packet";
 import { SvSync, SyncNode, SyncUpdate } from "@ndn/sync";
-import { fromUtf8, toUtf8 } from "@ndn/tlv";
+import { fromUtf8, toUtf8 } from "@ndn/util";
 import mitt, { Emitter } from "mitt";
 
 import { env } from "./env";
@@ -90,16 +90,13 @@ export class ChatApp {
   };
 
   private readonly handleUpdate = async (update: SyncUpdate<SvSync.ID>) => {
-    const sender = update.id.text;
-    const prefix = env.USER_PREFIX.append(new Component(undefined, update.id.value));
+    const sender = update.id.name.get(-1)?.text ?? "";
+    const prefix = env.USER_PREFIX.append(...update.id.name.comps);
     const messages: ChatMessage[] = (await Promise.allSettled(
       Array.from(update.seqNums()).map(async (seqNum): Promise<ChatMessage> => {
         const name = prefix.append(SequenceNum, seqNum);
         const data = await this.consumer.consume(name);
-        const {
-          timestamp,
-          text,
-        } = JSON.parse(fromUtf8(data.content));
+        const { timestamp, text } = JSON.parse(fromUtf8(data.content));
         if (!Number.isSafeInteger(timestamp) || typeof text !== "string") {
           throw new Error("invalid JSON");
         }

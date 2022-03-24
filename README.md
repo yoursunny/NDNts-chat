@@ -12,10 +12,10 @@ Technical highlights:
 
 Usage instructions:
 
-1. Dependencies: Node 16.x, Go 1.16 or newer.
-2. `npm install` or `pnpm install` to install dependencies.
+1. Dependencies: Node 17.x, Go 1.18.
+2. `corepack pnpm install` to install dependencies.
 3. `./server.sh` to start server components: YaNFD forwarder, NDNCERT certificate authority.
-4. `npm run serve` to start web server.
+4. `corepack pnpm serve` to start web server.
 5. Visit `http://localhost:3333` in two or more browsers.
 
 Current limitations:
