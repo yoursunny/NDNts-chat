@@ -2,10 +2,10 @@
   "private": true,
   "scripts": {
     "build": "webpack",
-    "lint": "xo --fix",
+    "lint": "xo-yoursunny --fix",
     "serve": "webpack serve"
   },
-  "packageManager": "pnpm@6.32.3",
+  "packageManager": "pnpm@7.0.1",
   "dependencies": {
     "@ndn/endpoint": "https://ndnts-nightly.ndn.today/endpoint.tgz",
     "@ndn/keychain": "https://ndnts-nightly.ndn.today/keychain.tgz",
@@ -22,22 +22,22 @@
     "@ndn/ws-transport": "https://ndnts-nightly.ndn.today/ws-transport.tgz",
     "dompurify": "^2.3.6",
     "dotenv-defaults": "^5.0.0",
-    "marked": "^4.0.12",
+    "marked": "^4.0.15",
     "mitt": "^3.0.0",
-    "preact": "^10.6.6"
+    "preact": "^10.7.2"
   },
   "devDependencies": {
     "@types/dompurify": "^2.3.3",
     "@types/dotenv-defaults": "^2.0.1",
     "@types/marked": "^4.0.3",
-    "@typescript/lib-dom": "npm:@types/web@0.0.60",
-    "@yoursunny/xo-config": "^0.48.0",
+    "@typescript/lib-dom": "npm:@types/web@0.0.64",
+    "@yoursunny/xo-config": "^0.48.4",
     "dotenv-webpack": "^7.1.0",
-    "ts-loader": "^9.2.8",
+    "ts-loader": "^9.3.0",
     "tsm": "^2.2.1",
-    "typescript": "~4.6.2",
-    "webpack": "^5.70.0",
+    "typescript": "~4.6.4",
+    "webpack": "^5.72.0",
     "webpack-cli": "^4.9.2",
-    "webpack-dev-server": "^4.7.4"
+    "webpack-dev-server": "^4.9.0"
   }
 }

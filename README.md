@@ -12,7 +12,7 @@ Technical highlights:
 
 Usage instructions:
 
-1. Dependencies: Node 17.x, Go 1.18.
+1. Dependencies: Node 18.x, Go 1.18.
 2. `corepack pnpm install` to install dependencies.
 3. `./server.sh` to start server components: YaNFD forwarder, NDNCERT certificate authority.
 4. `corepack pnpm serve` to start web server.

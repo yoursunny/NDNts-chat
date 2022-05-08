@@ -1,15 +1,16 @@
 #!/bin/bash
-set -eo pipefail
+set -euo pipefail
 export MSYS_NO_PATHCONV=1
+YANFD_VERSION=1c42e49c5bdfbc9b2a14df241082e189097e1b17
 if ! command -v yanfd >/dev/null; then
-  go install github.com/named-data/YaNFD/cmd/yanfd@latest
+  env CGO_ENABLED=0 go install github.com/named-data/YaNFD/cmd/yanfd@${YANFD_VERSION}
 fi
 if ! command -v dasel >/dev/null; then
   go install github.com/tomwright/dasel/cmd/dasel@latest
 fi
 if ! [[ -f runtime/yanfd.toml.sample ]]; then
   mkdir -p runtime
-  curl -fsLS -o runtime/yanfd.toml.sample https://raw.githubusercontent.com/named-data/YaNFD/master/yanfd.toml.sample
+  curl -fsLS -o runtime/yanfd.toml.sample https://raw.githubusercontent.com/named-data/YaNFD/${YANFD_VERSION}/yanfd.toml.sample
 fi
 
 YANFD_PID=
