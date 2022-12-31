@@ -1,5 +1,5 @@
 #!/usr/bin/env -S node --loader tsm
-import { ControlCommand, ControlResponse } from "@ndn/nfdmgmt";
+import { type ControlResponse, ControlCommand } from "@ndn/nfdmgmt";
 import { TcpTransport } from "@ndn/node-transport";
 import { Name } from "@ndn/packet";
 import dotenv from "dotenv-defaults";

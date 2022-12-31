@@ -1,9 +1,9 @@
-import { Endpoint, Producer } from "@ndn/endpoint";
+import { type Producer, Endpoint } from "@ndn/endpoint";
 import { SequenceNum } from "@ndn/naming-convention2";
-import { Data, Interest, Signer, Verifier } from "@ndn/packet";
-import { SvSync, SyncNode, SyncUpdate } from "@ndn/sync";
+import { type Interest, type Name, type Signer, type Verifier, Data } from "@ndn/packet";
+import { type SyncNode, type SyncUpdate, SvSync } from "@ndn/sync";
 import { fromUtf8, toUtf8 } from "@ndn/util";
-import mitt, { Emitter } from "mitt";
+import mitt, { type Emitter } from "mitt";
 
 import { env } from "./env";
 
@@ -48,7 +48,7 @@ export class ChatApp {
 
   public readonly myID: string;
   private readonly sync: SvSync;
-  private readonly myNode: SyncNode<SvSync.ID>;
+  private readonly myNode: SyncNode<Name>;
 
   private readonly producer: Producer;
   private readonly sentMessages = new Map<number, ChatMessage>();
@@ -89,9 +89,9 @@ export class ChatApp {
     })));
   };
 
-  private readonly handleUpdate = async (update: SyncUpdate<SvSync.ID>) => {
-    const sender = update.id.name.get(-1)?.text ?? "";
-    const prefix = env.USER_PREFIX.append(...update.id.name.comps);
+  private readonly handleUpdate = async (update: SyncUpdate<Name>) => {
+    const sender = update.id.get(-1)?.text ?? "";
+    const prefix = env.USER_PREFIX.append(...update.id.comps);
     const messages: ChatMessage[] = (await Promise.allSettled(
       Array.from(update.seqNums()).map(async (seqNum): Promise<ChatMessage> => {
         const name = prefix.append(SequenceNum, seqNum);

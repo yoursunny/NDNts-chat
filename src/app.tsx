@@ -1,7 +1,7 @@
 import { HierarchicalVerifier } from "@ndn/trust-schema";
 import { Component, Fragment, h } from "preact";
 
-import { ChatApp, ChatMessage } from "./chat";
+import { type ChatMessage, ChatApp } from "./chat";
 import { ComposeForm } from "./compose-form";
 import type { ConnectResult } from "./connect";
 import { env } from "./env";

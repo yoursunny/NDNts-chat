@@ -1,8 +1,8 @@
 import { Endpoint } from "@ndn/endpoint";
-import { Certificate, CertNaming, generateSigningKey, KeyChain, ValidityPeriod } from "@ndn/keychain";
+import { type Certificate, CertNaming, generateSigningKey, KeyChain, ValidityPeriod } from "@ndn/keychain";
 import { CaProfile, ClientNopChallenge, requestCertificate } from "@ndn/ndncert";
 import { enableNfdPrefixReg } from "@ndn/nfdmgmt";
-import { Data, Signer } from "@ndn/packet";
+import { type Signer, Data } from "@ndn/packet";
 import { Decoder } from "@ndn/tlv";
 import { WsTransport } from "@ndn/ws-transport";
 
